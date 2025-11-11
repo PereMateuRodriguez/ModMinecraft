@@ -1,5 +1,4 @@
 ﻿{
-  ""item.adventcalendar.advent_calendar"": ""Calendario de Adviento"",
-  ""screen.adventcalendar.title"": ""Calendario de Adviento"",
-  ""button.adventcalendar.claim"": ""Reclamar hoy""
+  "item.adventcalendar.construir_calendario": "Calendario para Anto",
+  "menu.adventcalendar.calendario": "Calendario para Anto"
 }

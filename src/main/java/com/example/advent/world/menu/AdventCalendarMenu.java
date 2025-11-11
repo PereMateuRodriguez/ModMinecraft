@@ -1,24 +1,26 @@
 package com.example.advent.world.menu;
-import net.minecraft.network.FriendlyByteBuf;
+
+import com.example.advent.registry.ModMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
-import static com.example.advent.registry.ModMenus.ADVENT_MENU;
-
 public class AdventCalendarMenu extends AbstractContainerMenu {
-    public AdventCalendarMenu(int id, Inventory inv) {
-        super(ADVENT_MENU.get(), id);
+
+    // Constructor usado por SimpleMenuProvider: (containerId, playerInventory)
+    public AdventCalendarMenu(int containerId, Inventory inv) {
+        super(ModMenus.ADVENT_MENU.get(), containerId);
+        // Si en el futuro añades slots, haz addSlot(...) aquí
     }
 
-    public AdventCalendarMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv);
-    }
-
+    // Requisito de AbstractContainerMenu: si el jugador puede seguir usando el menú
     @Override
-    public boolean stillValid(Player player) { return true; }
+    public boolean stillValid(Player player) {
+        return true;
+    }
 
+    // Requisito de AbstractContainerMenu: lógica de shift‑click; vacía por ahora
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         return ItemStack.EMPTY;

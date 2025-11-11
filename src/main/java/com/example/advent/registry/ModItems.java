@@ -7,12 +7,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-
-// ModItems.java
 public class ModItems {
     public static final DeferredRegister<Item> REGISTER =
             DeferredRegister.create(ForgeRegistries.ITEMS, AdventMod.MODID);
 
     public static final RegistryObject<Item> CONSTRUIR_CALENDARIO =
-            REGISTER.register("construir_calendario", () -> new Item(new Item.Properties()));
+            REGISTER.register("construir_calendario", () -> new AdventCalendarItem(new Item.Properties()));
 }
