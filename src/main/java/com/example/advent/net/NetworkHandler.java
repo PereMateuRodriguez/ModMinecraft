@@ -27,8 +27,8 @@ public class NetworkHandler {
                 PacketClaimToday.class,
                 PacketClaimToday::encode,
                 PacketClaimToday::decode,
-                PacketClaimToday::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+                PacketClaimToday::handle
         );
+
     }
 }

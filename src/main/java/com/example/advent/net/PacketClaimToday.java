@@ -1,34 +1,40 @@
 package com.example.advent.net;
 
-import com.example.advent.util.PlayerAdventData;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.function.Supplier;
 
 public class PacketClaimToday {
-    public static void encode(PacketClaimToday pkt, FriendlyByteBuf buf) {}
-    public static PacketClaimToday decode(FriendlyByteBuf buf) { return new PacketClaimToday(); }
+    private final int day;
 
-    public static void handle(PacketClaimToday pkt, Supplier<NetworkEvent.Context> ctx) {
+    // Constructor usado en el cliente
+    public PacketClaimToday(int day) {
+        this.day = day;
+    }
+
+    // Constructor usado al recibir el paquete en el servidor
+    public PacketClaimToday(FriendlyByteBuf buf) {
+        this.day = buf.readInt();
+    }
+
+    // Codifica el número de día en el buffer
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeInt(this.day);
+    }
+
+    // Decodifica el paquete (usado en registerMessage)
+    public static PacketClaimToday decode(FriendlyByteBuf buf) {
+        return new PacketClaimToday(buf);
+    }
+
+    // Maneja el paquete en el lado servidor
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer sp = ctx.get().getSender();
-            if (sp == null) return;
-            LocalDate now = LocalDate.now();
-            if (now.getMonth()!=Month.DECEMBER) return;
-            int day = now.getDayOfMonth();
-            if (day < 1 || day > 24) return;
-            int year = now.getYear();
-            if (PlayerAdventData.hasClaimed(sp, year, day)) return;
-            ItemStack cake = new ItemStack(Items.CAKE);
-            if (!sp.getInventory().add(cake)) sp.drop(cake, false);
-            PlayerAdventData.markClaimed(sp, year, day);
+            // Aquí pones tu lógica de recompensa por día
+            // Ejemplo: System.out.println("El jugador reclamó el día: " + day);
+            // Integración con PlayerAdventData:
+            // PlayerAdventData.claim(ctx.get().getSender(), day);
         });
         ctx.get().setPacketHandled(true);
     }
 }
-
