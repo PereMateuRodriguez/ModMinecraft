@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="adventcalendar"
+version="1.0.0"
+displayName="Advent Calendar"
+
+[[dependencies.adventcalendar]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+side="BOTH"
+
+[[dependencies.adventcalendar]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+side="BOTH"
