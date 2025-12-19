@@ -14,11 +14,15 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
 public class AdventCalendarItem extends Item {
-    public AdventCalendarItem(Properties props) { super(props); }
+
+    public AdventCalendarItem(Properties props) {
+        super(props);
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
         if (!level.isClientSide && player instanceof ServerPlayer sp) {
             MenuProvider provider = new SimpleMenuProvider(
                     (containerId, inv, p) -> new AdventCalendarMenu(containerId, inv),
@@ -26,6 +30,7 @@ public class AdventCalendarItem extends Item {
             );
             NetworkHooks.openScreen(sp, provider);
         }
+
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 }

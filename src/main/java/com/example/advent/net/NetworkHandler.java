@@ -2,11 +2,8 @@ package com.example.advent.net;
 
 import com.example.advent.AdventMod;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.Optional;
 
 public class NetworkHandler {
     private static final String PROTOCOL = "1";
@@ -29,6 +26,5 @@ public class NetworkHandler {
                 PacketClaimToday::decode,
                 PacketClaimToday::handle
         );
-
     }
 }

@@ -1,40 +1,65 @@
 package com.example.advent.net;
 
+import com.example.advent.AdventMod;
+import com.example.advent.util.PlayerAdventData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
+
+import java.time.LocalDate;
 import java.util.function.Supplier;
 
 public class PacketClaimToday {
     private final int day;
 
-    // Constructor usado en el cliente
+    // Cliente
     public PacketClaimToday(int day) {
         this.day = day;
     }
 
-    // Constructor usado al recibir el paquete en el servidor
+    // Servidor (decode)
     public PacketClaimToday(FriendlyByteBuf buf) {
         this.day = buf.readInt();
     }
 
-    // Codifica el número de día en el buffer
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(this.day);
     }
 
-    // Decodifica el paquete (usado en registerMessage)
     public static PacketClaimToday decode(FriendlyByteBuf buf) {
         return new PacketClaimToday(buf);
     }
 
-    // Maneja el paquete en el lado servidor
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            // Aquí pones tu lógica de recompensa por día
-            // Ejemplo: System.out.println("El jugador reclamó el día: " + day);
-            // Integración con PlayerAdventData:
-            // PlayerAdventData.claim(ctx.get().getSender(), day);
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null) return;
+
+            // Solo 24..30
+            if (day < 24 || day > 30) return;
+
+            // Día 24 -> índice 0, día 30 -> índice 6
+            int rewardIndex = day - 24;
+            if (rewardIndex < 0 || rewardIndex >= AdventMod.ADVENT_REWARDS.size()) return;
+
+            int year = LocalDate.now().getYear();
+
+            // Evitar reclamar dos veces (usa tu PlayerAdventData)
+            if (PlayerAdventData.hasClaimed(player, year, day)) {
+                player.sendSystemMessage(Component.literal("§cYa has reclamado el día " + day + "."));
+                return;
+            }
+
+            ItemStack reward = AdventMod.ADVENT_REWARDS.get(rewardIndex).copy();
+            player.getInventory().add(reward);
+
+            PlayerAdventData.markClaimed(player, year, day);
+
+            player.sendSystemMessage(Component.literal("§6¡Regalo del día " + day + " para Anto!"));
         });
+
         ctx.get().setPacketHandled(true);
     }
 }

@@ -12,5 +12,6 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, AdventMod.MODID);
 
     public static final RegistryObject<Item> CONSTRUIR_CALENDARIO =
-            REGISTER.register("construir_calendario", () -> new AdventCalendarItem(new Item.Properties()));
+            REGISTER.register("construir_calendario",
+                    () -> new AdventCalendarItem(new Item.Properties()));
 }
